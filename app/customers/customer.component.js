@@ -12,7 +12,8 @@ var core_1 = require('@angular/core');
 var forms_1 = require('@angular/forms');
 var customer_1 = require('./customer');
 var CustomerComponent = (function () {
-    function CustomerComponent() {
+    function CustomerComponent(fb) {
+        this.fb = fb;
         this.customer = new customer_1.Customer();
     }
     CustomerComponent.prototype.save = function () {
@@ -20,17 +21,11 @@ var CustomerComponent = (function () {
         console.log('Saved: ' + JSON.stringify(this.customerForm.value));
     };
     CustomerComponent.prototype.ngOnInit = function () {
-        this.customerForm = new forms_1.FormGroup({
-            firstName: new forms_1.FormControl(),
-            lastName: new forms_1.FormControl(),
-            email: new forms_1.FormControl(),
-            sendCatalog: new forms_1.FormControl(),
-            addressType: new forms_1.FormControl(),
-            street1: new forms_1.FormControl(),
-            street2: new forms_1.FormControl(),
-            city: new forms_1.FormControl(),
-            state: new forms_1.FormControl(),
-            zip: new forms_1.FormControl(),
+        this.customerForm = this.fb.group({
+            firstName: ['', [forms_1.Validators.required, forms_1.Validators.minLength(3)]],
+            lastName: ['', [forms_1.Validators.required, forms_1.Validators.maxLength(50)]],
+            email: ['', [forms_1.Validators.required, forms_1.Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+')]],
+            sendCatalog: true
         });
     };
     CustomerComponent = __decorate([
@@ -38,7 +33,7 @@ var CustomerComponent = (function () {
             selector: 'my-signup',
             templateUrl: './app/customers/customer.component.html'
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [forms_1.FormBuilder])
     ], CustomerComponent);
     return CustomerComponent;
 }());
